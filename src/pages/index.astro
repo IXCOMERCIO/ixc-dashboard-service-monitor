@@ -1,11 +1,28 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Tabs from '../components/Tabs.astro';
+import TabItem from '../components/TabItem.astro';
+import TabContent from '../components/TabContent.astro';
+import { paymentCards, logisticsCards, portalCards } from '../data/mockData.ts';
+import Header from '../components/layouts/Header.astro';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!-- Header -->
+<Header title="Project Dashboard" subtitle="Operations" />
+
+
+<!-- Tab layout -->
+<div class="container mx-auto px-4 mt-6">
+  <Tabs titles={['Payments', 'Logística', 'Portal']}>
+    <TabItem index={0} title="Payments" active={true}>
+      <TabContent items={paymentCards} />
+    </TabItem>
+
+    <TabItem index={1} title="Logística" active={false}>
+      <TabContent items={logisticsCards} />
+    </TabItem>
+
+    <TabItem index={2} title="Portal" active={false}>
+      <TabContent items={portalCards} />
+    </TabItem>
+  </Tabs>
+</div>

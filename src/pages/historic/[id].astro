@@ -1,0 +1,29 @@
+---
+import StepBack from "../../components/hooks/StepBack.astro";
+import Header from "../../components/layouts/Header.astro";
+import ServiceStatus from "../../components/services/ServiceStatus.astro";
+import {
+    paymentCards,
+    logisticsCards,
+    portalCards,
+} from "../../data/mockData.ts";
+import type { SubService } from "../../data/mockData.ts";
+
+const { id } = Astro.params;
+const allCards = [...paymentCards, ...logisticsCards, ...portalCards];
+const service = allCards.find((item) => item.id === id);
+
+if (!service) {
+    throw new Error(`Servicio con ID ${id} no encontrado.`);
+}
+
+const subservices = service.subservices as SubService[];
+const isDetail = false;
+---
+
+<Header title={service.title} subtitle="Detalle de Servicio" />
+
+<div class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+    <StepBack title="Regresar al dashboard" />
+    <ServiceStatus services={subservices} isDetail={isDetail} />
+</div>

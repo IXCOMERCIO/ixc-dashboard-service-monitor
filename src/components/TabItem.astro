@@ -1,0 +1,16 @@
+---
+export interface Props {
+  index: number;
+  title: string;
+  active: boolean;
+}
+
+const { index, title, active } = Astro.props;
+---
+
+<div
+  class={`tab-content ${active ? 'block' : 'hidden'}`}
+  data-index={index}
+>
+  <slot />
+</div>

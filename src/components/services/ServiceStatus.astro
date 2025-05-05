@@ -1,0 +1,112 @@
+---
+import ArchitectureDiagram from "../architecture/ArchitectureDiagram.jsx";
+import TestFlow from "../architecture/TestFlow.jsx";
+import type { ServiceCardData } from "../../data/mockData";
+import { paymentCards, logisticsCards, portalCards } from "../../data/mockData";
+
+export interface Props {
+  services: any[];
+  isDetail: boolean;
+}
+
+const { services, isDetail } = Astro.props;
+
+const { id } = Astro.params;
+
+console.log("Parametros recibidos:", id, isDetail);
+
+const allServices = [...paymentCards, ...logisticsCards, ...portalCards];
+const service: ServiceCardData | undefined = allServices.find(
+  (s) => s.id === id
+);
+
+if (!service) {
+  throw new Error(`Servicio con ID "${id}" no encontrado.`);
+}
+
+const subservices = service.subservices;
+
+const onlineCount = subservices.filter((s) => s.status === "online").length;
+const offlineCount = subservices.filter((s) => s.status === "offline").length;
+const degradedCount = subservices.filter((s) => s.status === "degraded").length;
+
+const avgResponseTime =
+  subservices.length > 0
+    ? Math.round(
+        subservices.reduce((sum, s) => sum + s.responseTime, 0) /
+          subservices.length
+      )
+    : 0;
+---
+
+<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Columna izquierda -->
+    <div class="flex flex-col gap-4">
+      <!-- Paneles de estado -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div
+          class="flex flex-col justify-between bg-white border p-4 rounded-lg shadow-sm"
+        >
+          <div class="text-sm text-gray-500 mb-2">Service Status</div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <div class="text-xl font-bold">{onlineCount}</div>
+              <div class="text-xs text-green-600">Online</div>
+            </div>
+            <div>
+              <div class="text-xl font-bold">{degradedCount}</div>
+              <div class="text-xs text-yellow-600">Degraded</div>
+            </div>
+            <div>
+              <div class="text-xl font-bold">{offlineCount}</div>
+              <div class="text-xs text-red-600">Offline</div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col justify-between bg-white border p-4 rounded-lg shadow-sm"
+        >
+          <div class="text-sm text-gray-500 mb-2">Average Response Time</div>
+          <div class="text-xl font-bold">{avgResponseTime} ms</div>
+        </div>
+      </div>
+
+      <!-- Lista de subservicios -->
+      <div class="bg-white p-4 border rounded-lg shadow-sm">
+        <div class="text-sm text-gray-500 mb-2">Subservices</div>
+        <ul class="divide-y divide-gray-200">
+          {
+            subservices.map((s) => (
+              <li class="py-2 flex justify-between items-center">
+                <span class="text-sm text-gray-800">{s.name}</span>
+                <span
+                  class={`text-xs font-semibold px-2 py-1 rounded ${
+                    s.status === "online"
+                      ? "bg-green-100 text-green-600"
+                      : s.status === "degraded"
+                        ? "bg-yellow-100 text-yellow-600"
+                        : "bg-red-100 text-red-600"
+                  }`}
+                >
+                  {s.status}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="bg-white p-4 border rounded-lg shadow-sm flex items-center justify-center"
+    >
+      {isDetail ? (
+        <ArchitectureDiagram client:visible service={service} />
+      ) : (
+        <TestFlow client:visible />
+      )}
+    </div>
+  </div>
+</div>

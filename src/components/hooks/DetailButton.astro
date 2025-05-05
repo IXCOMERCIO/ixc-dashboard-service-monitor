@@ -1,0 +1,11 @@
+---
+import ArrowRight from "../../assets/ArrowRight.astro";
+const { href, title } = Astro.props;
+---
+
+<a class="w-full" href={href}>
+    <button class="inline-flex items-center justify-center w-full rounded-md text-sm font-medium border border-gray-300 bg-white hover:bg-gray-100 h-10 px-4 py-2 transition">
+        {title}
+        <ArrowRight />
+    </button>
+</a>
