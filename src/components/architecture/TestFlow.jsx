@@ -21,11 +21,25 @@ const nodes = [
     data: { label: 'Child 2' },
     targetPosition: 'top',
   },
+  {
+    id: 'child-3',
+    position: { x: 400, y: 450 },
+    data: { label: 'Child 3' },
+    targetPosition: 'top',
+  },
+  {
+    id: 'child-4',
+    position: { x: 500, y: 650 },
+    data: { label: 'Child 4' },
+    targetPosition: 'top',
+  },
 ];
 
 const edges = [
   { id: 'e1', source: 'parent', target: 'child-1', type: 'smoothstep' },
   { id: 'e2', source: 'child-1', target: 'child-2', type: 'smoothstep' },
+  { id: 'e3', source: 'child-1', target: 'child-3', type: 'smoothstep' },
+  { id: 'e4', source: 'child-3', target: 'child-4', type: 'smoothstep' },
 ];
 
 export default function TestFlow() {

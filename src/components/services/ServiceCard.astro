@@ -2,6 +2,7 @@
 import ArrowRight from "../../assets/ArrowRight.astro"
 import DetailButton from "../hooks/DetailButton.astro";
 export interface Props {
+  service: string;
   title: string;
   description: string;
   status: 'Healthy' | 'Warning' | 'Critical';
@@ -60,6 +61,6 @@ const statusColor = {
   <!-- Footer buttons -->
   <div class="flex items-center p-6 pt-0 gap-4">
     <DetailButton href={detailsHref} title="Ver Detalles" />
-    <DetailButton href={historyHref} title="Ver Histórico" />
+    <!-- <DetailButton href={historyHref} title="Ver Histórico" /> -->
   </div>
 </div>

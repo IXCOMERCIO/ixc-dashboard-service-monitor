@@ -1,0 +1,96 @@
+---
+import StepBack from "../../../components/hooks/StepBack.astro";
+import Header from "../../../components/layouts/Header.astro";
+import ServiceDetail from "../../../components/services/ServiceDetail.astro";
+import { BASE_DASHBOARD_URL } from "astro:env/server";
+import type { SubService } from "../../../components/interfaces/DashboardInterfaces";
+
+const { service, id } = Astro.params;
+
+// Validamos que los parámetros sean válidos
+if (!service || !id) {
+  throw new Error("Los parámetros 'service' o 'id' no están definidos.");
+}
+
+// Construimos la URL de la API con los parámetros dinámicos
+const apiUrl = `${BASE_DASHBOARD_URL}/healthcheck/${service}/status/${id}`;
+
+let serviceDetail: any = null;
+let subservices: SubService[] = [];
+let isLoading = true;
+
+try {
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch data from ${apiUrl}`);
+  }
+
+  const data = await res.json();
+  //console.log("Service Detail:", data);
+
+  // Validamos que el servicio exista en la respuesta
+  if (!data[service]) {
+    throw new Error(`No se encontró el servicio '${service}' en la respuesta de la API.`);
+  }
+
+  // Accedemos al servicio específico dentro de la respuesta
+  serviceDetail = data[service]?.[id];
+
+  if (!serviceDetail) {
+    throw new Error(`No se encontró el servicio '${id}' en '${service}'.`);
+  }
+
+  // Extraemos los subservicios y conexiones
+  subservices = Object.values(serviceDetail.services || {}).map((svc: any) => ({
+    name: svc.serviceName,
+    status: svc.overallStatus.status,
+    executionTime: svc.executionTime,
+    disponibility: svc.disponibility,
+    message: svc.overallStatus.message,
+    connections: svc.connections
+      ? Object.values(svc.connections).map((conn: any) => ({
+          name: conn.serviceName,
+          status: conn.overallStatus.status,
+          executionTime: conn.executionTime,
+          message: conn.overallStatus.message,
+        }))
+      : [],
+  }));
+
+  isLoading = false;
+} catch (error) {
+  console.error("Error fetching service details:", error);
+  isLoading = false;
+}
+---
+
+<Header title={isLoading ? "Cargando..." : serviceDetail?.title || "Error"} subtitle="Detalle de Servicio" />
+
+<div class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+  <StepBack title="Regresar al dashboard" />
+
+  {isLoading ? (
+    <div class="space-y-6">
+      <div class="bg-white p-6 rounded-lg shadow animate-pulse">
+        <div class="h-6 bg-gray-300 rounded w-1/3 mb-4"></div>
+        <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+        <div class="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+        <div class="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow animate-pulse">
+        <div class="h-6 bg-gray-300 rounded w-1/3 mb-4"></div>
+        <div class="h-4 bg-gray-300 rounded w-full mb-2"></div>
+        <div class="h-4 bg-gray-300 rounded w-5/6 mb-2"></div>
+        <div class="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+      </div>
+    </div>
+  ) : serviceDetail ? (
+    <ServiceDetail serviceDetail={serviceDetail} subservices={subservices} />
+  ) : (
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-bold mb-4 text-red-600">Error al cargar los datos</h2>
+      <p class="text-gray-700">No se pudo obtener la información del servicio. Por favor, inténtalo de nuevo más tarde.</p>
+    </div>
+  )}
+</div>

@@ -2,27 +2,56 @@
 import Tabs from '../components/Tabs.astro';
 import TabItem from '../components/TabItem.astro';
 import TabContent from '../components/TabContent.astro';
-import { paymentCards, logisticsCards, portalCards } from '../data/mockData.ts';
 import Header from '../components/layouts/Header.astro';
+import { BASE_DASHBOARD_URL } from 'astro:env/server';
+import type { DashboardData, Service } from '../components/interfaces/DashboardInterfaces';
+
+const res = await fetch(`${BASE_DASHBOARD_URL}/dashboard`);
+if (!res.ok) {
+  throw new Error(`Failed to fetch data from ${BASE_DASHBOARD_URL}/dashboard`);
+}
+const data: DashboardData = await res.json();
+
+const mapStatus = (status: string): "Healthy" | "Critical" | "Warning" => {
+  switch (status.toLowerCase()) {
+    case "healthy":
+      return "Healthy";
+    case "critical":
+      return "Critical";
+    case "warning":
+      return "Warning";
+    default:
+      throw new Error(`Invalid status: ${status}`);
+  }
+};
+
+const generateCards = (services: Record<string, Service>) =>
+  Object.entries(services).map(([key, service]) => ({
+    id: key,
+    title: service.title,
+    description: service.description,
+    status: mapStatus(service.overallStatus.status),
+    services: `${service.serviceState.online}/${service.serviceState.online + service.serviceState.offline} Online`,
+    responseTime: `${service.serviceState.averageResponseTime} ms`,
+  }));
+
+const sections = [
+  { title: 'Payments', service: 'payments', cards: generateCards(data.payments) },
+  { title: 'Logística', service: 'logistics', cards: generateCards(data.logistic) },
+  { title: 'Portal', service: 'portal', cards: generateCards(data.consumer) },
+];
 ---
 
 <!-- Header -->
 <Header title="Project Dashboard" subtitle="Operations" />
 
-
 <!-- Tab layout -->
 <div class="container mx-auto px-4 mt-6">
-  <Tabs titles={['Payments', 'Logística', 'Portal']}>
-    <TabItem index={0} title="Payments" active={true}>
-      <TabContent items={paymentCards} />
-    </TabItem>
-
-    <TabItem index={1} title="Logística" active={false}>
-      <TabContent items={logisticsCards} />
-    </TabItem>
-
-    <TabItem index={2} title="Portal" active={false}>
-      <TabContent items={portalCards} />
-    </TabItem>
+  <Tabs titles={sections.map(section => section.title)}>
+    {sections.map((section, index) => (
+      <TabItem index={index} title={section.title} active={index === 0}>
+        <TabContent service={section.service} items={section.cards} />
+      </TabItem>
+    ))}
   </Tabs>
 </div>

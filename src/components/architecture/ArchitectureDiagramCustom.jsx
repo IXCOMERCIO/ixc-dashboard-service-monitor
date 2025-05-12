@@ -79,8 +79,6 @@ function mapStatus(status) {
       return 'succeeded';
     case 'offline':
       return 'declined';
-    case 'degraded':
-      return 'paused';
     default:
       return 'paused';
   }
@@ -88,6 +86,5 @@ function mapStatus(status) {
 
 function calculateParentStatus(subs) {
   if (subs.some((s) => s.status === 'offline')) return 'declined';
-  if (subs.some((s) => s.status === 'degraded')) return 'paused';
   return 'succeeded';
 }

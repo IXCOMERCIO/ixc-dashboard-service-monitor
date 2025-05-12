@@ -2,6 +2,7 @@
 import ServiceCard from './services/ServiceCard.astro';
 
 export interface Props {
+  service: string;
   items: {
     id: string;
     title: string;
@@ -12,9 +13,9 @@ export interface Props {
   }[];
 }
 
-const { items } = Astro.props;
+const { service, items } = Astro.props;
 
-console.log('Datos recibidos en TabContent:', items);
+//console.log('Datos recibidos en TabContent:', { service, items });
 ---
 
 {items?.length === 0 ? (
@@ -33,13 +34,14 @@ console.log('Datos recibidos en TabContent:', items);
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     {items?.map((item) => (
       <ServiceCard
+        service={service}
         title={item.title}
         description={item.description}
         status={item.status}
         services={item.services}
         responseTime={item.responseTime}
-        detailsHref={`/monitor/${item.id}`}
-        historyHref={`/historic/${item.id}`}
+        detailsHref={`/monitor/${service}/${item.id}`}
+        historyHref={`/historic/${service}/${item.id}`}
       />
     ))}
   </div>
