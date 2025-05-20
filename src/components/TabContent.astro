@@ -10,6 +10,7 @@ export interface Props {
     status: "Healthy" | "Critical" | "Warning";
     services: string;
     responseTime: string;
+    serviceStatusPercentage: number;
   }[];
 }
 
@@ -40,6 +41,7 @@ const { service, items } = Astro.props;
         status={item.status}
         services={item.services}
         responseTime={item.responseTime}
+        serviceStatusPercentage={item.serviceStatusPercentage}
         detailsHref={`/monitor/${service}/${item.id}`}
         historyHref={`/historic/${service}/${item.id}`}
       />

@@ -33,20 +33,21 @@ const generateCards = (services: Record<string, Service>) =>
     status: mapStatus(service.overallStatus.status),
     services: `${service.serviceState.online}/${service.serviceState.online + service.serviceState.offline} Online`,
     responseTime: `${service.serviceState.averageResponseTime} ms`,
+    serviceStatusPercentage: (service.serviceState.online / (service.serviceState.online + service.serviceState.offline)) * 100
   }));
 
 const sections = [
-  { title: 'Payments', service: 'payments', cards: generateCards(data.payments) },
-  { title: 'Logística', service: 'logistics', cards: generateCards(data.logistic) },
-  { title: 'Portal', service: 'portal', cards: generateCards(data.consumer) },
+  { title: 'Pagos', service: 'payments', cards: generateCards(data.payments) },
+  { title: 'Logística', service: 'logistic', cards: generateCards(data.logistic) },
+  { title: 'Consumer', service: 'consumer', cards: generateCards(data.consumer) },
 ];
 ---
 
 <!-- Header -->
-<Header title="Project Dashboard" subtitle="Operations" />
+<Header title="Dashboard Healthcheck" subtitle="Desafío Q2" />
 
 <!-- Tab layout -->
-<div class="container mx-auto px-4 mt-6">
+<div class="mx-auto px-4 mt-6">
   <Tabs titles={sections.map(section => section.title)}>
     {sections.map((section, index) => (
       <TabItem index={index} title={section.title} active={index === 0}>

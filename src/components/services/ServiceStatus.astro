@@ -41,7 +41,7 @@ const avgResponseTime =
     : 0;
 ---
 
-<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 mt-6 space-y-6">
+<div class="w-full mx-auto px-4 sm:px-6 mt-6 space-y-6">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <!-- Columna izquierda -->
     <div class="flex flex-col gap-4">
@@ -50,7 +50,7 @@ const avgResponseTime =
         <div
           class="flex flex-col justify-between bg-white border p-4 rounded-lg shadow-sm"
         >
-          <div class="text-sm text-gray-500 mb-2">Service Status</div>
+          <div class="text-sm text-gray-500 mb-2">Estado de los servicios</div>
           <div class="grid grid-cols-3 gap-2 text-center">
             <div>
               <div class="text-xl font-bold">{onlineCount}</div>
@@ -70,14 +70,13 @@ const avgResponseTime =
         <div
           class="flex flex-col justify-between bg-white border p-4 rounded-lg shadow-sm"
         >
-          <div class="text-sm text-gray-500 mb-2">Average Response Time</div>
+          <div class="text-sm text-gray-500 mb-2">Tiempo de respuesta promedio</div>
           <div class="text-xl font-bold">{avgResponseTime} ms</div>
         </div>
       </div>
 
       <!-- Lista de subservicios -->
       <div class="bg-white p-4 border rounded-lg shadow-sm">
-        <div class="text-sm text-gray-500 mb-2">Subservices</div>
         <table
           class="table-auto w-full text-sm text-left text-gray-800 border-collapse"
         >

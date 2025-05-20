@@ -13,7 +13,7 @@ if (!service || !id) {
 }
 
 // Construimos la URL de la API con los parámetros dinámicos
-const apiUrl = `${BASE_DASHBOARD_URL}/healthcheck/${service}/status/${id}`;
+const apiUrl = `${BASE_DASHBOARD_URL}/status/${service}/${id}`;
 
 let serviceDetail: any = null;
 let subservices: SubService[] = [];
@@ -66,7 +66,7 @@ try {
 
 <Header title={isLoading ? "Cargando..." : serviceDetail?.title || "Error"} subtitle="Detalle de Servicio" />
 
-<div class="max-w-6xl mx-auto px-4 mt-6 space-y-6">
+<div class="mx-auto px-4 mt-6 space-y-6">
   <StepBack title="Regresar al dashboard" />
 
   {isLoading ? (
