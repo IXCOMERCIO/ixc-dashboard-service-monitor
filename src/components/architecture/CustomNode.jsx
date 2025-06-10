@@ -2,6 +2,9 @@ import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 
 export default function CustomNode({ data }) {
+
+    console.log("Data:", JSON.stringify(data, null, 2));
+
     const statusMap = {
         healthy: { label: 'Healthy', icon: '🟢', class: 'border-green-500' },
         critical: { label: 'Critical', icon: '🔴', class: 'border-red-500' },
@@ -9,8 +12,8 @@ export default function CustomNode({ data }) {
     };
 
     const current = statusMap[data.status] || {
-        label: 'Unknown',
-        icon: '❔',
+        label: '',
+        icon: '',
         class: 'border-gray-300',
     };
 
@@ -21,9 +24,6 @@ export default function CustomNode({ data }) {
             <Handle type="source" position={Position.Right} />
 
             <div className="font-semibold">{data.name}</div>
-            {/* {data.description && (
-                <div className="text-xs text-gray-500">{data.description}</div>
-            )} */}
             <div className="mt-2 space-y-1">
                 <div>
                     {current.icon} {current.label}

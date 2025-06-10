@@ -18,7 +18,7 @@ export interface Props {
 }
 
 const { services, isDetail } = Astro.props;
-//console.log("-------------------------Services----------------------:", services);
+console.log("-------------------------Services----------------------:", services);
 const serviceList = Object.values(services.services);
 //console.log("Service List:", serviceList);
 
@@ -32,13 +32,9 @@ const degradedCount = serviceList.filter(
   (s) => s.overallStatus?.status === "warning"
 ).length;
 
-const avgResponseTime =
-  serviceList.length > 0
-    ? Math.round(
-        serviceList.reduce((sum, s) => sum + parseFloat(s.executionTime), 0) /
-          serviceList.length
-      )
-    : 0;
+console.log("Service List:", JSON.stringify(serviceList, null, 2));
+
+const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
 ---
 
 <div class="w-full mx-auto px-4 sm:px-6 mt-6 space-y-6">
@@ -82,17 +78,17 @@ const avgResponseTime =
         >
           <thead>
             <tr class="bg-gray-100 text-gray-600 uppercase text-xs">
-              <th class=" py-2"></th>
-              <th class=" py-2">Servicio</th>
-              <th class=" py-2">Tiempo de ejecución</th>
-              <th class=" py-2">Disponibilidad</th>
+              <th class="py-2 w-10"></th>
+              <th class="py-2 whitespace-nowrap">Servicio</th>
+              <th class="py-2 whitespace-nowrap">Tiempo de ejecución</th>
+              <th class="py-2 whitespace-nowrap">Disponibilidad</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
             {
               serviceList.map((s) => (
                 <tr>
-                  <td class="px-4 py-2">
+                  <td class="px-4 py-2 w-10">
                     <span
                       class={`w-3 h-3 inline-block rounded-full ${
                         s.overallStatus?.status === "healthy"
@@ -104,9 +100,9 @@ const avgResponseTime =
                       title={s.overallStatus?.status}
                     />
                   </td>
-                  <td class="py-2">{s.serviceName}</td>
-                  <td class="py-2">{s.executionTime}</td>
-                  <td class="py-2">{s.disponibility}</td>
+                  <td class="py-2 whitespace-nowrap">{s.serviceName}</td>
+                  <td class="py-2 whitespace-nowrap">{s.executionTime && s.executionTime !== 'UNKNOWN' ? s.executionTime : '--'}</td>
+                  <td class="py-2 whitespace-nowrap">{s.disponibility && s.disponibility !== 'UNKNOWN' ? s.disponibility : '--'}</td>
                 </tr>
               ))
             }
