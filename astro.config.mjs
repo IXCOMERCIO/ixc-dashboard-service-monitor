@@ -5,6 +5,8 @@ import tailwindcss from '@astrojs/tailwind';
 
 import vercel from '@astrojs/vercel';
 
+import icon from 'astro-icon';
+
 // https://astro.build/config
 export default defineConfig({
   // vite: {
@@ -12,7 +14,7 @@ export default defineConfig({
   // },
   output: 'server',
 
-  integrations: [tailwindcss(), react()],
+  integrations: [tailwindcss(), react(), icon()],
 
   env:{
     schema:{

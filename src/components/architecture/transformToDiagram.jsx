@@ -5,8 +5,8 @@ function transformToDiagram(serviceData) {
   const subservices = serviceData.services || {};
   const serviceKeys = Object.keys(subservices);
 
-  const xGap = 200;
-  const yGap = 150;
+  const xGap = 400;
+  const yGap = 220;
 
   // Calcular altura total para centrar el nodo raíz
   const totalHeight = (serviceKeys.length - 1) * yGap;
@@ -53,12 +53,12 @@ function transformToDiagram(serviceData) {
     // Añadir conexiones si existen
     if (svc.connections) {
       const connEntries = Object.entries(svc.connections);
-      const baseX = xGap + 200;
-      const baseY = subserviceY - ((connEntries.length - 1) * 75) / 2;
+      const baseX = xGap + 400;
+      const baseY = subserviceY - ((connEntries.length - 1) * 85) / 2;
 
       connEntries.forEach(([connKey, connSvc], connIndex) => {
         const connId = `${subserviceId}-${connKey}`;
-        const connY = baseY + connIndex * 75;
+        const connY = baseY + connIndex * 85;
 
         nodes.push({
           id: connId,

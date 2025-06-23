@@ -18,7 +18,7 @@ export default function CustomNode({ data }) {
     };
 
     return (
-        <div className={`rounded-lg border-2 shadow-sm px-4 py-3 w-40 text-center text-sm relative `}>
+        <div className={`rounded-lg border-2 shadow-sm px-3 py-3 w-80 text-center text-sm relative `}>
             {/* Handles para conexión */}
             <Handle type="target" position={Position.Left} />
             <Handle type="source" position={Position.Right} />
