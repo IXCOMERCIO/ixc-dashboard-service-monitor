@@ -103,6 +103,13 @@ export const paymentCards: ServiceCardData[] = [
     subservices: analyticsSubservices,
   }),
   createServiceCard({
+    id: "orchestrator",
+    title: "Analytics Platform",
+    description: "Data processing and BI services.",
+    status: "Critical",
+    subservices: analyticsSubservices,
+  }),
+  createServiceCard({
     id: "fraud-detection",
     title: "Fraud Detection",
     description: "Real-time fraud prevention and monitoring services.",
