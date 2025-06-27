@@ -29,7 +29,9 @@ try {
 
   // Validamos que el servicio exista en la respuesta
   if (!data[service]) {
-    throw new Error(`No se encontró el servicio '${service}' en la respuesta de la API.`);
+    throw new Error(
+      `No se encontró el servicio '${service}' en la respuesta de la API.`
+    );
   }
 
   // Accedemos al servicio específico dentro de la respuesta
@@ -63,233 +65,245 @@ try {
 }
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{isLoading ? "Cargando..." : serviceDetail?.title || "Error"} - Detalle de Servicio</title>
+    <title>
+      {isLoading ? "Cargando..." : serviceDetail?.title || "Error"} - Detalle de
+      Servicio
+    </title>
     <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-        
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
         }
-        
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
+        to {
+          opacity: 1;
+          transform: translateX(0);
         }
-        
-        .animate-fade-in {
-            animation: fadeInUp 0.6s ease-out;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
-        
-        .animate-slide-in {
-            animation: slideInLeft 0.6s ease-out;
+        50% {
+          opacity: 0.7;
         }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
         }
-        
-        .hover-scale {
-            transition: all 0.3s ease;
+        100% {
+          background-position: 1000px 0;
         }
-        
-        .hover-scale:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 1000px 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .status-indicator {
-            position: relative;
-        }
-        
-        .status-indicator::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: inherit;
-            animation: pulse 2s infinite;
-            opacity: 0.6;
-        }
+      }
+
+      .animate-fade-in {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slide-in {
+        animation: slideInLeft 0.6s ease-out;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .hover-scale {
+        transition: all 0.3s ease;
+      }
+
+      .hover-scale:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 1000px 100%;
+        animation: shimmer 1.5s infinite;
+      }
+
+      .status-indicator {
+        position: relative;
+      }
+
+      .status-indicator::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: inherit;
+        animation: pulse 2s infinite;
+        opacity: 0.6;
+      }
     </style>
-</head>
-<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+  </head>
 
-<!-- aqui va el headerrrrrr wolololo -->
-<div class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                        {isLoading ? "Cargando..." : serviceDetail?.title || "Error en el Servicio"}
-                    </h1>
-                    <p class="text-sm text-gray-500 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Detalle de Servicio
-                    </p>
-                </div>
-            </div>
-            
-            <!-- boton refrescar para q sea chiquito como la empresa uwu -->
-            <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg flex items-center space-x-2 group">
-                <svg class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                <span class="text-sm font-medium">Refrescar</span>
-            </button>
-        </div>
-    </div>
-</div>
+  <body
+    class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen"
+  >
+    <!-- aqui va el headerrrrrr wolololo -->
+    <Header
+      title={serviceDetail.title}
+      subtitle="Detalle de Servicio"
+      isLoading={isLoading}
+    />
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <!-- el pansito ñam ñam -->
-    <div class="mb-4 animate-fade-in">
-      <button class="ml-6 inline-flex items-center space-x-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 bg-white/70 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm hover:shadow-md" onclick="history.back()">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            <span class="font-medium">Dashboard</span>
-        </button>
-    </div>
-
-    <!-- el contenido principal -->
-    {isLoading ? (
-        <!-- Estado de Carga Mejorado -->
-        <div class="space-y-6">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <StepBack title="Dashboard" />
+      <!-- el contenido principal -->
+      {
+        isLoading ? (
+          <div class="space-y-6">
             <div class="glass-effect rounded-2xl shadow-xl p-6 animate-fade-in">
-                <div class="flex items-center mb-6">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl mr-4 animate-pulse"></div>
-                    <div class="flex-1">
-                        <div class="h-6 skeleton rounded-lg w-1/3 mb-2"></div>
-                        <div class="h-4 skeleton rounded w-1/2"></div>
-                    </div>
+              <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl mr-4 animate-pulse" />
+                <div class="flex-1">
+                  <div class="h-6 skeleton rounded-lg w-1/3 mb-2" />
+                  <div class="h-4 skeleton rounded w-1/2" />
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
-                        <div class="h-12 skeleton rounded-lg mb-3"></div>
-                        <div class="h-4 skeleton rounded w-2/3"></div>
-                    </div>
-                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-                        <div class="h-12 skeleton rounded-lg mb-3"></div>
-                        <div class="h-4 skeleton rounded w-2/3"></div>
-                    </div>
-                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
-                        <div class="h-12 skeleton rounded-lg mb-3"></div>
-                        <div class="h-4 skeleton rounded w-2/3"></div>
-                    </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                  <div class="h-12 skeleton rounded-lg mb-3" />
+                  <div class="h-4 skeleton rounded w-2/3" />
                 </div>
-                
-                <div class="h-64 skeleton rounded-xl"></div>
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
+                  <div class="h-12 skeleton rounded-lg mb-3" />
+                  <div class="h-4 skeleton rounded w-2/3" />
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                  <div class="h-12 skeleton rounded-lg mb-3" />
+                  <div class="h-4 skeleton rounded w-2/3" />
+                </div>
+              </div>
+
+              <div class="h-64 skeleton rounded-xl" />
             </div>
 
-            <div class="glass-effect rounded-2xl shadow-xl p-6 animate-fade-in" style="animation-delay: 0.2s">
-                <div class="h-6 skeleton rounded w-1/4 mb-4"></div>
-                <div class="space-y-3">
-                    <div class="h-12 skeleton rounded-lg"></div>
-                    <div class="h-12 skeleton rounded-lg"></div>
-                    <div class="h-12 skeleton rounded-lg"></div>
-                </div>
+            <div
+              class="glass-effect rounded-2xl shadow-xl p-6 animate-fade-in"
+              style="animation-delay: 0.2s"
+            >
+              <div class="h-6 skeleton rounded w-1/4 mb-4" />
+              <div class="space-y-3">
+                <div class="h-12 skeleton rounded-lg" />
+                <div class="h-12 skeleton rounded-lg" />
+                <div class="h-12 skeleton rounded-lg" />
+              </div>
             </div>
-        </div>
-    ) : serviceDetail ? (
-        <!-- Contenido del Servicio -->
-        <div class="animate-fade-in">
-            <ServiceDetail serviceDetail={serviceDetail} subservices={subservices} />
-        </div>
-    ) : (
-        <!-- Estado de Error Mejorado -->
-        <div class="glass-effect rounded-2xl shadow-xl p-8 text-center animate-fade-in">
+          </div>
+        ) : serviceDetail ? (
+          <div class="animate-fade-in">
+            <ServiceDetail
+              serviceDetail={serviceDetail}
+              subservices={subservices}
+            />
+          </div>
+        ) : (
+          <div class="glass-effect rounded-2xl shadow-xl p-8 text-center animate-fade-in">
             <div class="w-20 h-20 bg-gradient-to-r from-red-400 to-pink-400 rounded-full mx-auto mb-6 flex items-center justify-center">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+              <svg
+                class="w-10 h-10 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </div>
-            
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                ¡Ups! Algo salió mal
-            </h2>
-            
-            <p class="text-gray-600 mb-6 max-w-md mx-auto">
-                No pudimos cargar la información del servicio. Por favor, verifica tu conexión e inténtalo nuevamente.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <button 
-                    onclick="location.reload()" 
-                    class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg flex items-center justify-center space-x-2"
-                >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    <span>Reintentar</span>
-                </button>
-                
-                <button 
-                    onclick="history.back()" 
-                    class="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center space-x-2"
-                >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    <span>Volver</span>
-                </button>
-            </div>
-        </div>
-    )}
-</div>
 
-</body>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+              ¡Ups! Algo salió mal
+            </h2>
+
+            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+              No pudimos cargar la información del servicio. Por favor, verifica
+              tu conexión e inténtalo nuevamente.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onclick="location.reload()"
+                class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg flex items-center justify-center space-x-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <span>Reintentar</span>
+              </button>
+
+              <button
+                onclick="history.back()"
+                class="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center space-x-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                <span>Volver</span>
+              </button>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </body>
 </html>
