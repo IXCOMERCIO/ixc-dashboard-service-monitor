@@ -3,20 +3,12 @@ import StepBack from "../../../components/hooks/StepBack.astro";
 import Header from "../../../components/layouts/Header.astro";
 import ServiceStatus from "../../../components/services/ServiceStatus.astro";
 import {
-/*import {
-    paymentCards,
-    logisticsCards,
-    portalCards,
 } from "../../../data/mockData";
-} from "../../../data/mockData";*/
 import { BASE_DASHBOARD_URL } from "astro:env/server";
-import type { SubService } from "../../../data/mockData.ts";
 import PerformanceChart from "../../../components/statistics/PerformanceChart.jsx";
 import Card from "../../../components/utils/Card.jsx";
 
 const { service, id } = Astro.params;
-//const allCards = [...paymentCards, ...logisticsCards, ...portalCards];
-//const service = allCards.find((item) => item.id === id);
 
 if (!service || !id) {
   throw new Error("Los parámetros 'service' o 'id' no están definidos.");
