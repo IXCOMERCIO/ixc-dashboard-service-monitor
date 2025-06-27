@@ -26,7 +26,6 @@ let statisticsData: any = null;
 let errorData: any = null;
 let servicesData: any = null;
 let graphData: any = null;
-//const subservices = service.subservices as SubService[];
 
 try {
   const statisticsRes = await fetch(apiUrlStatistics);
@@ -61,26 +60,44 @@ try {
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
-  return date.toLocaleString(undefined, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
+  return date.toLocaleString();
 }
+
+// function formatDateOnly(dateString: string) {
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString('es-ES', {
+//     day: "2-digit",
+//     month: "2-digit", 
+//     year: "numeric"
+//   });
+// }
 
 const statusColor = {
   healthy: "bg-green-500",
-  warning: "bg-yellow-500",
+  warning: "bg-yellow-500", 
   critical: "bg-red-500",
+} as const;
+
+const statusColorText = {
+  healthy: "text-green-700",
+  warning: "text-yellow-700",
+  critical: "text-red-700",
+} as const;
+
+const statusBg = {
+  healthy: "bg-green-50",
+  warning: "bg-yellow-50",
+  critical: "bg-red-50",
 } as const;
 
 type StatusType = keyof typeof statusColor;
 
-//const isDetail = false;
+// Función para obtener el estado del error
+function getErrorStatus(status: number | string) {
+  if (status === 503) return 'critical';
+  if (status === 404) return 'warning';
+  return 'warning';
+}
 ---
 
 <!doctype html>
@@ -88,141 +105,245 @@ type StatusType = keyof typeof statusColor;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - {servicesData[service][id].title}</title>
   </head>
-  <body
-    class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen"
-  >
+  <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+
+
     <Header
       title={servicesData[service][id].title}
       subtitle="Detalle de Servicio"
       isLoading={false}
     />
 
-    <div class="mx-auto px-4 my-2">
+    <div class=" mx-auto px-4 py-6">
       <StepBack title="Dashboard" />
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-2">
-        <!-- Disponibilidad -->
-        <Card
-          title="Disponibilidad (30d)"
-          value={`${statisticsData.statistics.availabilityPercentage}%`}
-          color="green"
-          description="Porcentaje de tiempo en línea"
-        />
-        <!-- Tiempo de respuesta promedio -->
-        <Card
-          title="T. Respuesta Promedio (30d)"
-          value={`${statisticsData.statistics.averageResponseTime}ms`}
-          color="blue"
-          description="Tiempo promedio de respuesta"
-        />
-        <Card
-          title="Total Servicios (30d)"
-          value={statisticsData.statistics.totalServices}
-          color="yellow"
-          description="Número total de servicios"
-        />
-        <!-- Total Errores -->
-        <Card
-          title="Total Errores (30d)"
-          value={statisticsData.statistics.downtimeServices}
-          color="red"
-          description="Total de errores registrados"
-        />
-        <!-- Incidentes Críticos -->
-      </div>
-    </div>
-
-    <PerformanceChart client:only="react" graphData={graphData}/>
-
-    <!-- Sección de Servicios y Errores -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-      <!-- Servicios -->
-      <div class="bg-white border rounded-lg shadow-sm p-4 ml-6 mb-6">
-        <div class="font-semibold text-lg mb-4">Servicios</div>
-        <ul>
-          {
-            Object.values(servicesData[service][id].services)?.map(
-              (svc: any) => (
-                <li class="flex items-center justify-between py-2 border-b last:border-b-0">
-                  <div class="flex items-center gap-2">
-                    <span
-                      class={`w-3 h-3 rounded-full ${statusColor[svc.overallStatus?.status as StatusType] ?? statusColor.warning} inline-block`}
-                    />
-                    <span class="text-sm">{svc.serviceName}</span>
-                  </div>
-                  <span class="text-sm">{svc.executionTime ?? 0}</span>
-                </li>
-              )
-            )
-          }
-        </ul>
-      </div>
-
-      <!-- Registro de Errores Recientes -->
-      <div class="bg-white border rounded-lg shadow-sm p-4 mr-6 mb-6">
-        <div class="font-semibold text-lg mb-4">
-          Registro de Errores Recientes
+      
+      <!-- metricas principales -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 mb-8">
+        <!-- disponibilidad -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="bg-green-100 rounded-lg p-3 mr-4">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-600">Disponibilidad (30d)</h3>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.availabilityPercentage}%</p>
+                <p class="text-xs text-gray-500 mt-1">Porcentaje de tiempo en línea</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead>
-              <tr class="bg-gray-50 text-gray-500 uppercase text-xs">
-                <th class="py-2 px-2 text-left">Estado</th>
-                <th class="py-2 px-2 text-left">Fecha y Hora</th>
-                <th class="py-2 px-2 text-left">Servicio Afectado</th>
-                <th class="py-2 px-2 text-left">Código de Estado</th>
-              </tr>
-            </thead>
-            <tbody>
+
+        <!-- tiempo respuesta -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="bg-purple-100 rounded-lg p-3 mr-4">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-600">Tiempo de Respuesta</h3>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.averageResponseTime}ms</p>
+                <p class="text-xs text-gray-500 mt-1">Promedio actual</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- total servicios -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="bg-blue-100 rounded-lg p-3 mr-4">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-600">Total Servicios(30d)</h3>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.totalServices}</p>
+                <p class="text-xs text-gray-500 mt-1">Servicios monitoreados</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- total errores -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="bg-red-100 rounded-lg p-3 mr-4">
+                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-medium text-gray-600">Total Errores</h3>
+                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.downtimeServices}</p>
+                <p class="text-xs text-gray-500 mt-1">Últimos 30 días</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- grafiquito -->
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+          <h2 class="text-xl font-bold flex items-center">
+            <div class="bg-white bg-opacity-20 rounded-lg p-2 mr-3">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            Rendimiento del Sistema
+          </h2>
+          <p class="text-purple-100 mt-2 font-medium">Análisis de performance en tiempo real</p>
+        </div>
+        <div class="p-6">
+          <PerformanceChart client:only="react" graphData={graphData}/>
+        </div>
+      </div>
+
+      <!-- seccion de errores y servicios -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        
+        <!-- panel de servicios -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+              <div class="bg-blue-100 rounded-lg p-2 mr-3">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              Servicios Activos
+            </h3>
+            <p class="text-sm text-gray-600 mt-1">{Object.values(servicesData[service][id].services).length} servicios monitoreados</p>
+          </div>
+          <div class="p-6">
+            <div class="space-y-4">
               {
-                errorData.data?.map((err: ErrorData) => (
-                  <tr class="border-b last:border-b-0">
-                    <td class="py-2 px-2">
-                      {err.status === 503 && (
-                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block" />
-                      )}
-                      {err.status === 404 && (
-                        <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block" />
-                      )}
-                      {err.status !== 503 && err.status !== 404 && (
-                        <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block" />
-                      )}
-                    </td>
-                    <td class="py-2 px-2 whitespace-nowrap">
-                      {formatDate(err.date)}
-                    </td>
-                    <td class="py-2 px-2">{err.serviceName}</td>
-                    <td class="py-2 px-2">
-                      <span
-                        class={`px-2 py-1 rounded text-xs font-mono ${err.status === 503 ? "bg-red-100 text-red-600" : err.status === 404 ? "bg-yellow-100 text-yellow-700" : "bg-yellow-100 text-yellow-700"}`}
-                      >
-                        {err.status === "ECONNRESET"
-                          ? "ECONNRESET"
-                          : err.status}
-                      </span>
-                    </td>
-                  </tr>
+                Object.values(servicesData[service][id].services)?.map((svc: any) => (
+                  <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
+                    <div class="flex items-center gap-4">
+                      <div class="flex-shrink-0">
+                        <div class={`w-3 h-3 rounded-full ${statusColor[svc.overallStatus?.status as StatusType] ?? statusColor.warning}`}></div>
+                      </div>
+                      <div>
+                        <span class="text-sm font-semibold text-gray-900">{svc.serviceName}</span>
+                        <div class="flex items-center gap-2 mt-1">
+                          <span class="text-xs text-gray-500">Estado:</span>
+                          <span class={`text-xs font-medium px-2 py-1 rounded-full ${
+                            svc.overallStatus?.status === 'healthy' ? 'bg-green-100 text-green-700' : 
+                            svc.overallStatus?.status === 'warning' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                          }`}>
+                            {svc.overallStatus?.status === 'healthy' ? 'Healthy' : 
+                             svc.overallStatus?.status === 'warning' ? 'Warning' : 'Offline'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm font-semibold text-blue-600">
+                        {svc.executionTime ?? 0}ms
+                      </div>
+                      <div class="text-xs text-gray-500">tiempo resp.</div>
+                    </div>
+                  </div>
                 ))
               }
-            </tbody>
-          </table>
-          <div class="text-xs text-gray-500 mt-2">
-            Mostrando 1-{
-              errorData.pagination.limit * errorData.pagination.currentPage
-            } de {errorData.pagination.totalRecords ?? 0}
+            </div>
           </div>
-          <!--<div class="flex justify-end mt-2">
-      <button
-        class="border rounded px-2 py-1 text-gray-500 hover:bg-gray-100 mr-2"
-        disabled
-      >
-        &lt;
-      </button>
-      <button class="border rounded px-2 py-1 text-gray-500 hover:bg-gray-100">
-        &gt;
-      </button>
-    </div>
-    -->
+        </div>
+
+        <!-- panel de errores recientes -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+              <div class="bg-red-100 rounded-lg p-2 mr-3">
+                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+              </div>
+              Registro de Errores Recientes
+            </h3>
+            <p class="text-sm text-gray-600 mt-1">Últimos 10 eventos registrados</p>
+          </div>
+          <div class="overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha y Hora</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicio</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  {
+                    errorData.data?.map((err: ErrorData, index: number) => {
+                      const errorStatus = getErrorStatus(err.status);
+                      return (
+                        <tr class={`hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                          <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                              <div class={`w-2.5 h-2.5 rounded-full ${statusColor[errorStatus]} mr-3`}></div>
+                              <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                errorStatus === 'critical' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {errorStatus === 'critical' ? 'Crítico' : 'Warning'}
+                              </span>
+                            </div>
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 font-medium">
+                              {formatDate(err.date)}
+                            </div>
+                          </td>
+                          <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900 font-medium truncate max-w-32">
+                              {err.serviceName}
+                            </div>
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap">
+                            <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              err.status === 503 ? "bg-red-100 text-red-800" : 
+                              err.status === 404 ? "bg-yellow-100 text-yellow-800" : 
+                              "bg-yellow-100 text-yellow-800"
+                            }`}>
+                              {err.status === "ECONNRESET" ? "ECONNRESET" : err.status}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- registros para paginacion futura wink wink -->
+            <div class="px-6 py-3 bg-gray-50 border-t border-gray-200">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                  Mostrando <span class="font-medium">1</span> a <span class="font-medium">{errorData.pagination.limit * errorData.pagination.currentPage}</span> de{" "}
+                  <span class="font-medium">{errorData.pagination.totalRecords ?? 0}</span> registros
+                </div>
+                <div class="text-xs text-gray-500">
+                  Actualizado hace pocos minutos
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
