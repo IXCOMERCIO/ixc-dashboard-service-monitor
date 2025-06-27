@@ -5,6 +5,12 @@ import { BASE_DASHBOARD_URL } from "astro:env/server";
 import PerformanceChart from "../../../components/statistics/PerformanceChart.jsx";
 import Card from "../../../components/utils/Card.jsx";
 
+interface ErrorData {
+  date: string;
+  serviceName: string;
+  status: number | string;
+}
+
 const { service, id } = Astro.params;
 
 if (!service || !id) {
@@ -14,16 +20,19 @@ if (!service || !id) {
 const apiUrlStatistics = `${BASE_DASHBOARD_URL}/history/statistics?team=${service}&project=${id}&days=30`;
 const apiUrlErrors = `${BASE_DASHBOARD_URL}/history/errors?team=${service}&project=${id}&limit=10&page=1&days=30`;
 const apiUrlServices = `${BASE_DASHBOARD_URL}/status/${service}/${id}`;
+const apiUrlGraph = `${BASE_DASHBOARD_URL}/history/graph?team=${service}&project=${id}&days=30`;
 
 let statisticsData: any = null;
 let errorData: any = null;
 let servicesData: any = null;
+let graphData: any = null;
 //const subservices = service.subservices as SubService[];
 
 try {
   const statisticsRes = await fetch(apiUrlStatistics);
   const errorsRes = await fetch(apiUrlErrors);
   const servicesRes = await fetch(apiUrlServices);
+  const graphRes = await fetch(apiUrlGraph)
 
   if (!statisticsRes.ok) {
     throw new Error(`Failed to fetch data from ${apiUrlStatistics}`);
@@ -37,9 +46,15 @@ try {
     throw new Error(`Failed to fetch data from ${apiUrlServices}`);
   }
 
+  if (!graphRes.ok) {
+    throw new Error(`Failed to fetch data from ${apiUrlGraph}`);
+  }
+
   statisticsData = await statisticsRes.json();
   errorData = await errorsRes.json();
   servicesData = await servicesRes.json();
+  graphData = await graphRes.json()
+  console.log(graphData)
 } catch (error) {
   console.error("Error fetching service details:", error);
 }
@@ -61,7 +76,9 @@ const statusColor = {
   healthy: "bg-green-500",
   warning: "bg-yellow-500",
   critical: "bg-red-500",
-};
+} as const;
+
+type StatusType = keyof typeof statusColor;
 
 //const isDetail = false;
 ---
@@ -78,6 +95,7 @@ const statusColor = {
     <Header
       title={servicesData[service][id].title}
       subtitle="Detalle de Servicio"
+      isLoading={false}
     />
 
     <div class="mx-auto px-4 my-2">
@@ -88,29 +106,33 @@ const statusColor = {
           title="Disponibilidad (30d)"
           value={`${statisticsData.statistics.availabilityPercentage}%`}
           color="green"
+          description="Porcentaje de tiempo en línea"
         />
         <!-- Tiempo de respuesta promedio -->
         <Card
           title="T. Respuesta Promedio (30d)"
           value={`${statisticsData.statistics.averageResponseTime}ms`}
           color="blue"
+          description="Tiempo promedio de respuesta"
         />
         <Card
           title="Total Servicios (30d)"
           value={statisticsData.statistics.totalServices}
           color="yellow"
+          description="Número total de servicios"
         />
         <!-- Total Errores -->
         <Card
           title="Total Errores (30d)"
           value={statisticsData.statistics.downtimeServices}
           color="red"
+          description="Total de errores registrados"
         />
         <!-- Incidentes Críticos -->
       </div>
     </div>
 
-    <PerformanceChart client:only="react" />
+    <PerformanceChart client:only="react" graphData={graphData}/>
 
     <!-- Sección de Servicios y Errores -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
@@ -124,7 +146,7 @@ const statusColor = {
                 <li class="flex items-center justify-between py-2 border-b last:border-b-0">
                   <div class="flex items-center gap-2">
                     <span
-                      class={`w-3 h-3 rounded-full ${statusColor[svc.overallStatus?.status]} inline-block`}
+                      class={`w-3 h-3 rounded-full ${statusColor[svc.overallStatus?.status as StatusType] ?? statusColor.warning} inline-block`}
                     />
                     <span class="text-sm">{svc.serviceName}</span>
                   </div>
@@ -149,12 +171,11 @@ const statusColor = {
                 <th class="py-2 px-2 text-left">Fecha y Hora</th>
                 <th class="py-2 px-2 text-left">Servicio Afectado</th>
                 <th class="py-2 px-2 text-left">Código de Estado</th>
-                <th class="py-2 px-2 text-left">Mensaje</th>
               </tr>
             </thead>
             <tbody>
               {
-                errorData.data?.map((err) => (
+                errorData.data?.map((err: ErrorData) => (
                   <tr class="border-b last:border-b-0">
                     <td class="py-2 px-2">
                       {err.status === 503 && (
@@ -180,7 +201,6 @@ const statusColor = {
                           : err.status}
                       </span>
                     </td>
-                    <td class="py-2 px-2">{err.message}</td>
                   </tr>
                 ))
               }
