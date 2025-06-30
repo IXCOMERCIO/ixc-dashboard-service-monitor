@@ -154,31 +154,27 @@ function getErrorStatus(status: number | string) {
         </div>
 
         <!-- total servicios -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl p-6 shadow-lg transition-shadow duration-200">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <div class="bg-blue-100 rounded-lg p-3 mr-4">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                </svg>
+              <div class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-lg p-2 mr-4">
+                <Icon name="material-symbols:captive-portal" class="w-6 h-6 text-white"/>
               </div>
               <div>
                 <h3 class="text-sm font-medium text-gray-600">Total Servicios (30d)</h3>
-                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.totalServices}</p>
-                <p class="text-xs text-gray-500 mt-1">Servicios monitoreados</p>
+                <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.totalServices}</p>
+                <p class="text-xs text-gray-500">Servicios monitoreados</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- total errores -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl p-6 shadow-lg transition-shadow duration-200">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <div class="bg-red-100 rounded-lg p-3 mr-4">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
+              <div class="bg-gradient-to-r from-red-600 to-red-400 rounded-lg p-2 mr-4">
+                <Icon name="material-symbols:bug-report" class="w-6 h-6 text-white"/>
               </div>
               <div>
                 <h3 class="text-sm font-medium text-gray-600">Total Errores (30d)</h3>
@@ -191,18 +187,21 @@ function getErrorStatus(status: number | string) {
       </div>
 
       <!-- grafiquito -->
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-        <div class="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-          <h2 class="text-xl font-bold flex items-center">
-            <div class="bg-white bg-opacity-20 rounded-lg p-2 mr-3">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-              </svg>
+      <div class="mb-4 px-4">
+        <div class="bg-white overflow-hidden rounded-xl shadow-lg mb-8">
+          <div class="px-6 pt-4">
+            <div class="flex items-center">
+              <div class="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg p-2 mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-gray-800">Rendimiento del Sistema</h3>
+                <p class="text-xs text-gray-500">Análisis de performance en tiempo real</p>
+              </div>
             </div>
-            Rendimiento del Sistema
-          </h2>
-          <p class="text-purple-100 mt-2 font-medium">Análisis de performance en tiempo real</p>
-        </div>
+          </div>
         <div class="p-6">
           <PerformanceChart client:only="react" graphData={graphData}/>
         </div>
@@ -210,21 +209,22 @@ function getErrorStatus(status: number | string) {
 
       <!-- seccion de errores y servicios -->
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        
         <!-- panel de servicios -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-              <div class="bg-blue-100 rounded-lg p-2 mr-3">
-                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div class="bg-white overflow-hidden">
+            <div class="px-6 pt-4">
+              <div class="flex items-center">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-2 mr-3">
+                  <Icon name="material-symbols:data-table" class="w-5 h-5 text-white"/>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-gray-800">Resumen del Servicios</h3>
+                  <p class="text-xs text-gray-500">{Object.values(servicesData[service][id].services).length} servicios monitoreados</p>
+                </div>
               </div>
-              Servicios Activos
-            </h3>
-            <p class="text-sm text-gray-600 mt-1">{Object.values(servicesData[service][id].services).length} servicios monitoreados</p>
+            </div>
           </div>
-          <div class="p-6">
+          <div class="px-6 py-4">
             <div>
               {
                 Object.values(servicesData[service][id].services)?.map((svc: any) => (
@@ -249,7 +249,7 @@ function getErrorStatus(status: number | string) {
                     </div>
                     <div class="text-right">
                       <div class="text-sm font-semibold text-blue-600">
-                        {svc.executionTime ?? 0}ms
+                        {svc.executionTime ?? 0}
                       </div>
                       <div class="text-xs text-gray-500">tiempo resp.</div>
                     </div>
@@ -261,22 +261,22 @@ function getErrorStatus(status: number | string) {
         </div>
 
         <!-- panel de errores recientes -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-              <div class="bg-red-100 rounded-lg p-2 mr-3">
-                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
+        <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div class="px-6 pt-4">
+            <div class="flex items-center">
+              <div class="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg p-2 mr-3">
+                <Icon name="material-symbols:error" class="w-5 h-5 text-white"/>
               </div>
-              Registro de Errores Recientes
-            </h3>
-            <p class="text-sm text-gray-600 mt-1">Últimos 10 eventos registrados</p>
+              <div>
+                <h3 class="text-sm font-bold text-gray-800">Registro de Errores Recientes</h3>
+                <p class="text-xs text-gray-500">Últimos 10 eventos registrados</p>
+              </div>
+            </div>
           </div>
-          <div class="overflow-hidden">
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+          <div class="overflow-hidden mt-4">
+            <div class="overflow-x-auto p-2">
+              <table class="min-w-full">
+                <thead class="bg-gray-100">
                   <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha y Hora</th>
@@ -284,7 +284,7 @@ function getErrorStatus(status: number | string) {
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white">
                   {
                     errorData.data?.map((err: ErrorData, index: number) => {
                       const errorStatus = getErrorStatus(err.status);
@@ -292,7 +292,6 @@ function getErrorStatus(status: number | string) {
                         <tr class={`hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                           <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                              <div class={`w-2.5 h-2.5 rounded-full ${statusColor[errorStatus]} mr-3`}></div>
                               <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                 errorStatus === 'critical' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
                               }`}>

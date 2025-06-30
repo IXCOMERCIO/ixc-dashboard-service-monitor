@@ -111,10 +111,7 @@ export default function PerformanceChart({ graphData }) {
   };
 
   return (
-    <div className="bg-white border rounded-lg shadow-sm p-6 mt-8">
-      <div className="font-semibold text-lg mb-2">
-        Rendimiento a lo largo del tiempo
-      </div>
+    <div className="bg-white px-4 pb-4">
       <Line data={data} options={options} height={50} />
     </div>
   );
