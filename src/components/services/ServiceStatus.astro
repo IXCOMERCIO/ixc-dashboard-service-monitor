@@ -114,7 +114,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
       <!-- Paneles de estado compactos -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <!-- Estado de servicios -->
-        <div class="glass-effect rounded-xl shadow-lg p-4 hover-scale border-l-4 border-blue-400">
+        <div class="glass-effect rounded-xl shadow-lg p-4 border-l-4 border-blue-400">
           <div class="flex items-center mb-3">
             <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mr-3">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
         </div>
 
         <!-- Tiempo de respuesta -->
-        <div class="glass-effect rounded-xl shadow-lg p-4 hover-scale border-l-4 border-purple-400">
+        <div class="glass-effect rounded-xl shadow-lg p-4 border-l-4 border-purple-400">
           <div class="flex items-center mb-3">
             <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mr-3">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +188,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
       </div>
 
       <!-- Lista de servicios compacta -->
-      <div class="glass-effect rounded-xl shadow-lg p-4 hover-scale">
+      <div class="glass-effect rounded-xl shadow-lg p-4">
         <div class="flex items-center mb-4">
           <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
           </div>
         </div>
         
-        <div class="overflow-hidden rounded-lg border border-gray-100">
+        <div class="rounded-lg border border-gray-100">
           <table class="w-full text-sm">
             <thead>
               <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
@@ -252,7 +252,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
                           name="material-symbols:help"
                           class="w-4 h-4 text-red-500 cursor-pointer"
                         />
-                        <div class="absolute z-10 hidden group-hover:block top-full mt-2 right-0 px-3 py-2 text-sm text-white bg-red-500 rounded shadow whitespace-normal max-w-md break-words">
+                        <div class="absolute z-[99999999] hidden group-hover:block top-full mt-2 right-0 px-3 py-2 text-sm text-white bg-red-500 rounded shadow whitespace-normal max-w-md break-words transform translate-z-0">
                           <div class="mb-1"><span class="font-bold">Código del error:</span> {s.status || "N/A"}</div>
                           <div>{s.response || "N/A"}</div>
                         </div>
@@ -268,7 +268,7 @@ const avgResponseTime = services.serviceState.averageResponseTime ?? 0;
     </div>
 
     <!-- Diagrama de Arquitectura compacto -->
-    <div class="glass-effect rounded-xl shadow-lg p-4 hover-scale animate-fade-in min-h-[400px]" style="animation-delay: 0.2s">
+    <div class="glass-effect rounded-xl shadow-lg p-4 animate-fade-in min-h-[400px]" style="animation-delay: 0.2s">
       <div class="flex items-center mb-4">
         <div class="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center mr-3">
           <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

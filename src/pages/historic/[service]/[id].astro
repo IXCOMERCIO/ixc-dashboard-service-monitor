@@ -3,7 +3,7 @@ import StepBack from "../../../components/hooks/StepBack.astro";
 import Header from "../../../components/layouts/Header.astro";
 import { BASE_DASHBOARD_URL } from "astro:env/server";
 import PerformanceChart from "../../../components/statistics/PerformanceChart.jsx";
-import Card from "../../../components/utils/Card.jsx";
+import { Icon } from "astro-icon/components";
 
 interface ErrorData {
   date: string;
@@ -107,7 +107,7 @@ function getErrorStatus(status: number | string) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - {servicesData[service][id].title}</title>
   </head>
-  <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+  <body class="bg-indigo-50 min-h-screen">
 
 
     <Header
@@ -116,42 +116,38 @@ function getErrorStatus(status: number | string) {
       isLoading={false}
     />
 
-    <div class=" mx-auto px-4 py-6">
+    <div class=" mx-auto px-4 py-2">
       <StepBack title="Dashboard" />
       
       <!-- metricas principales -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-8 px-5">
         <!-- disponibilidad -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl p-6 shadow-lg transition-shadow duration-200">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <div class="bg-green-100 rounded-lg p-3 mr-4">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+              <div class="bg-gradient-to-r from-green-600 to-green-400 rounded-lg p-2 mr-4">
+                <Icon name="material-symbols:check" class="w-6 h-6 text-white"/>
               </div>
               <div>
                 <h3 class="text-sm font-medium text-gray-600">Disponibilidad (30d)</h3>
-                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.availabilityPercentage}%</p>
-                <p class="text-xs text-gray-500 mt-1">Porcentaje de tiempo en línea</p>
+                <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.availabilityPercentage}%</p>
+                <p class="text-xs text-gray-500">Porcentaje de tiempo en línea</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- tiempo respuesta -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl p-6 shadow-lg transition-shadow duration-200">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <div class="bg-purple-100 rounded-lg p-3 mr-4">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
+              <div class="bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg p-2 mr-4">
+                <Icon name="material-symbols:av-timer" class="w-6 h-6 text-white"/>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Tiempo de Respuesta</h3>
-                <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.averageResponseTime}ms</p>
-                <p class="text-xs text-gray-500 mt-1">Promedio actual</p>
+                <h3 class="text-sm font-medium text-gray-600">Tiempo de Respuesta (30d)</h3>
+                <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.averageResponseTime}ms</p>
+                <p class="text-xs text-gray-500">Promedio actual</p>
               </div>
             </div>
           </div>
@@ -167,7 +163,7 @@ function getErrorStatus(status: number | string) {
                 </svg>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Total Servicios(30d)</h3>
+                <h3 class="text-sm font-medium text-gray-600">Total Servicios (30d)</h3>
                 <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.totalServices}</p>
                 <p class="text-xs text-gray-500 mt-1">Servicios monitoreados</p>
               </div>
@@ -185,9 +181,9 @@ function getErrorStatus(status: number | string) {
                 </svg>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Total Errores</h3>
+                <h3 class="text-sm font-medium text-gray-600">Total Errores (30d)</h3>
                 <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.downtimeServices}</p>
-                <p class="text-xs text-gray-500 mt-1">Últimos 30 días</p>
+                <p class="text-xs text-gray-500 mt-1">Servicios con error</p>
               </div>
             </div>
           </div>
@@ -229,17 +225,17 @@ function getErrorStatus(status: number | string) {
             <p class="text-sm text-gray-600 mt-1">{Object.values(servicesData[service][id].services).length} servicios monitoreados</p>
           </div>
           <div class="p-6">
-            <div class="space-y-4">
+            <div>
               {
                 Object.values(servicesData[service][id].services)?.map((svc: any) => (
-                  <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
+                  <div class="flex items-center justify-between rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100 p-1">
                     <div class="flex items-center gap-4">
                       <div class="flex-shrink-0">
                         <div class={`w-3 h-3 rounded-full ${statusColor[svc.overallStatus?.status as StatusType] ?? statusColor.warning}`}></div>
                       </div>
                       <div>
                         <span class="text-sm font-semibold text-gray-900">{svc.serviceName}</span>
-                        <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-2">
                           <span class="text-xs text-gray-500">Estado:</span>
                           <span class={`text-xs font-medium px-2 py-1 rounded-full ${
                             svc.overallStatus?.status === 'healthy' ? 'bg-green-100 text-green-700' : 
