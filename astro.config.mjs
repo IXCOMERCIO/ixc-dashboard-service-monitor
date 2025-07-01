@@ -3,7 +3,7 @@ import { defineConfig , envField} from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@astrojs/tailwind';
 
-import vercel from '@astrojs/vercel';
+//import vercel from '@astrojs/vercel';
 
 import icon from 'astro-icon';
 
@@ -12,7 +12,7 @@ export default defineConfig({
   // vite: {
   //   plugins: [tailwindcss()]
   // },
-  output: 'server',
+  output: 'static',
 
   integrations: [tailwindcss(), react(), icon()],
 
@@ -23,5 +23,5 @@ export default defineConfig({
     }
   },
 
-  adapter: vercel(),
+  //adapter: vercel(),
 });
