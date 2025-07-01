@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.2.7",
+    "@astrojs/react": "^4.3.0",
     "@astrojs/tailwind": "^6.0.2",
-    "@astrojs/vercel": "^8.0.4",
+    "@astrojs/vercel": "^8.2.0",
     "@iconify-json/material-symbols": "^1.2.26",
     "@iconify-json/mdi": "^1.2.3",
     "@types/react": "^19.1.2",

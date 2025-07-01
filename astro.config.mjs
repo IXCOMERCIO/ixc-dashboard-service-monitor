@@ -4,9 +4,10 @@ import react from '@astrojs/react';
 import tailwindcss from '@astrojs/tailwind';
 import icon from 'astro-icon';
 
+import vercel from '@astrojs/vercel';
+
 export default defineConfig({
   output: 'static',
-
   integrations: [tailwindcss(), react(), icon()],
 
   env: {
@@ -14,5 +15,7 @@ export default defineConfig({
       SHOW_GENERAL_STATUS: envField.boolean({ default: true, context: 'server', access: 'secret' }),
       BASE_DASHBOARD_URL: envField.string({ context: 'server', access: 'secret' })
     }
-  }
+  },
+
+  adapter: vercel()
 });
