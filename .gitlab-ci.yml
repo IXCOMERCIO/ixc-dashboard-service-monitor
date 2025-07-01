@@ -1,0 +1,5 @@
+include:
+ # Import template CI/CD node   
+  - project: 'omnichannel/integration-cross/devops/templates-gitlab-ci/templates-node/azure-static-web-apps'
+    ref: develop
+    file: '.gitlab-ci-template-node-static-web-app.yml'
