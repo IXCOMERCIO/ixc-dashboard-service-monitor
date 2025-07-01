@@ -43,7 +43,7 @@ deploy-dev:
     APP_PATH: "$CI_PROJECT_DIR"
     OUTPUT_PATH: '$CI_PROJECT_DIR/dist'
     SWA_CLI_DEPLOY_ENV: "Production"
-    SWA_RUNTIME_CONFIG: staticwebapp.config.json
+    #SWA_RUNTIME_CONFIG: staticwebapp.config.json
     #CONFIG_FILE_LOCATION: "swa-cli.config.json"
   
   # needs:
