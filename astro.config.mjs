@@ -12,7 +12,7 @@ export default defineConfig({
   // vite: {
   //   plugins: [tailwindcss()]
   // },
-  output: 'static',
+  output: 'server',
 
   integrations: [tailwindcss(), react(), icon()],
 
