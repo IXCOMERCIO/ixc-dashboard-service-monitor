@@ -3,7 +3,7 @@
     "configurations": {
       "app": {
         "appLocation": "./",
-        "outputLocation": "dist",
+        "outputLocation": "dist/client",
         "appBuildCommand": "npm run build"
       }
     }
