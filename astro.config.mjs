@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 import tailwindcss from '@astrojs/tailwind';
 import icon from 'astro-icon';
 
-import vercel from '@astrojs/vercel';
+import node from '@astrojs/node';
 
 export default defineConfig({
   output: 'static',
@@ -17,5 +17,5 @@ export default defineConfig({
     }
   },
 
-  adapter: vercel()
+  adapter: node({mode: 'standalone'}),
 });
