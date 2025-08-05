@@ -18,10 +18,23 @@ if (!service || !id) {
   throw new Error("Los parámetros 'service' o 'id' no están definidos.");
 }
 
-const apiUrlStatistics = `${BASE_DASHBOARD_URL}/history/statistics?team=${service}&project=${id}&days=30`;
-const apiUrlErrors = `${BASE_DASHBOARD_URL}/history/errors?team=${service}&project=${id}&limit=10&page=1&days=30`;
+const url = new URL(Astro.request.url);
+const selectedDays = url.searchParams.get('days') || '30';
+
+function daysToPeriod(days: string) {
+  switch(days) {
+    case '30': return '1 mes';
+    case '60': return '2 meses';
+    case '90': return '3 meses';
+    case '365': return '1 año';
+    default: return `${days} días`;
+  }
+}
+
+const apiUrlStatistics = `${BASE_DASHBOARD_URL}/history/statistics?team=${service}&project=${id}&days=${selectedDays}`;
+const apiUrlErrors = `${BASE_DASHBOARD_URL}/history/errors?team=${service}&project=${id}&limit=10&page=1&days=${selectedDays}`;
 const apiUrlServices = `${BASE_DASHBOARD_URL}/status/${service}/${id}`;
-const apiUrlGraph = `${BASE_DASHBOARD_URL}/history/graph?team=${service}&project=${id}&days=30`;
+const apiUrlGraph = `${BASE_DASHBOARD_URL}/history/graph?team=${service}&project=${id}&days=${selectedDays}`;
 
 let statisticsData: any = null;
 let errorData: any = null;
@@ -64,15 +77,6 @@ function formatDate(dateString: string) {
   return date.toLocaleString();
 }
 
-// function formatDateOnly(dateString: string) {
-//   const date = new Date(dateString);
-//   return date.toLocaleDateString('es-ES', {
-//     day: "2-digit",
-//     month: "2-digit", 
-//     year: "numeric"
-//   });
-// }
-
 const statusColor = {
   healthy: "bg-green-500",
   warning: "bg-yellow-500", 
@@ -110,15 +114,37 @@ function getErrorStatus(status: number | string) {
   </head>
   <body class="bg-indigo-50 min-h-screen">
 
-
     <Header
       title={servicesData[service][id].title}
       subtitle="Detalle de Servicio"
       isLoading={false}
     />
 
-    <div class=" mx-auto px-4 py-2">
-      <StepBack title="Dashboard" />
+    <div class="mx-auto px-4 py-2">
+      <!-- Navigation and Filter Section -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <StepBack title="Dashboard" />
+        
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium text-gray-700">Período:</span>
+          <div class="relative">
+            <select 
+              id="daysFilter" 
+              class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-10 text-sm font-medium text-gray-700 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors cursor-pointer"
+            >
+              <option value="30" selected={selectedDays === '30'}>1 mes</option>
+              <option value="60" selected={selectedDays === '60'}>2 meses</option>
+              <option value="90" selected={selectedDays === '90'}>3 meses</option>
+              <option value="365" selected={selectedDays === '365'}>1 año</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <!-- metricas principales -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-8 px-5">
@@ -130,7 +156,7 @@ function getErrorStatus(status: number | string) {
                 <Icon name="material-symbols:check" class="w-6 h-6 text-white"/>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Disponibilidad (30d)</h3>
+                <h3 class="text-sm font-medium text-gray-600">Disponibilidad ({daysToPeriod(selectedDays)})</h3>
                 <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.availabilityPercentage}%</p>
                 <p class="text-xs text-gray-500">Porcentaje de tiempo en línea</p>
               </div>
@@ -146,7 +172,7 @@ function getErrorStatus(status: number | string) {
                 <Icon name="material-symbols:av-timer" class="w-6 h-6 text-white"/>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Tiempo de Respuesta (30d)</h3>
+                <h3 class="text-sm font-medium text-gray-600">Tiempo de Respuesta ({daysToPeriod(selectedDays)})</h3>
                 <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.averageResponseTime}ms</p>
                 <p class="text-xs text-gray-500">Promedio actual</p>
               </div>
@@ -162,7 +188,7 @@ function getErrorStatus(status: number | string) {
                 <Icon name="material-symbols:captive-portal" class="w-6 h-6 text-white"/>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Total Servicios (30d)</h3>
+                <h3 class="text-sm font-medium text-gray-600">Total Servicios ({daysToPeriod(selectedDays)})</h3>
                 <p class="text-2xl font-bold text-gray-900">{statisticsData.statistics.totalServices}</p>
                 <p class="text-xs text-gray-500">Servicios monitoreados</p>
               </div>
@@ -178,7 +204,7 @@ function getErrorStatus(status: number | string) {
                 <Icon name="material-symbols:bug-report" class="w-6 h-6 text-white"/>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-600">Total Errores (30d)</h3>
+                <h3 class="text-sm font-medium text-gray-600">Total Errores ({daysToPeriod(selectedDays)})</h3>
                 <p class="text-2xl font-bold text-gray-900 mt-1">{statisticsData.statistics.downtimeServices}</p>
                 <p class="text-xs text-gray-500 mt-1">Servicios con error</p>
               </div>
@@ -199,7 +225,7 @@ function getErrorStatus(status: number | string) {
               </div>
               <div>
                 <h3 class="text-sm font-bold text-gray-800">Rendimiento del Sistema</h3>
-                <p class="text-xs text-gray-500">Análisis de performance en tiempo real</p>
+                <p class="text-xs text-gray-500">Análisis de performance en tiempo real ({daysToPeriod(selectedDays)})</p>
               </div>
             </div>
           </div>
@@ -270,7 +296,7 @@ function getErrorStatus(status: number | string) {
               </div>
               <div>
                 <h3 class="text-sm font-bold text-gray-800">Registro de Errores Recientes</h3>
-                <p class="text-xs text-gray-500">Últimos 10 eventos registrados</p>
+                <p class="text-xs text-gray-500">Últimos 10 eventos registrados ({daysToPeriod(selectedDays)})</p>
               </div>
             </div>
           </div>
@@ -343,5 +369,24 @@ function getErrorStatus(status: number | string) {
         </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const daysFilter = document.getElementById('daysFilter');
+        
+        if (daysFilter) {
+          daysFilter.addEventListener('change', function() {
+            const selectedDays = this.value;
+            const currentUrl = new URL(window.location);
+            
+            // Actualizar el parámetro days en la URL
+            currentUrl.searchParams.set('days', selectedDays);
+            
+            // Recargar la página con el nuevo parámetro
+            window.location.href = currentUrl.toString();
+          });
+        }
+      });
+    </script>
   </body>
 </html>
