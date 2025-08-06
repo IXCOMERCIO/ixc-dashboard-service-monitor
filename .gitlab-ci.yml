@@ -1,4 +1,34 @@
-include:
-  - project: 'omnichannel/integration-cross/devops/templates-gitlab-ci/templates-node/azure-static-web-apps'
-    ref: astro
-    file: '.gitlab-ci-template-node-static-web-app.yml'
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_ENV: production
+
+# ✅ Etapa de compilación
+build-app:
+  stage: build
+  image: node:lts
+  script:
+    - npm ci
+    - npm run build
+    - cp server.js dist/server.js  # Asegura que el server.js esté incluido
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+  only:
+    - develop
+
+
+# ✅ Etapa de despliegue a Azure App Service usando ZIP deploy
+deploy-app:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    - cd dist
+    - zip -r app.zip .
+    - az login --service-principal -u "$AZ_APP_ID_TEST" -p "$AZ_APP_PWD_TEST" --tenant "$AZ_TENANT_ID_TEST"
+    - az webapp deployment source config-zip --resource-group "$DEV_RESOURCE_GROUP" --name "$DEV_APP_NAME" --src app.zip
+  only:
+    - develop
