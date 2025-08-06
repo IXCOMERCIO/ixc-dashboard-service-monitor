@@ -10,7 +10,7 @@ build-app:
   stage: build
   image: node:lts
   script:
-    - npm ci
+    - npm install
     - npm run build
     - cp server.js dist/server.js  # Asegura que el server.js esté incluido
   artifacts:
