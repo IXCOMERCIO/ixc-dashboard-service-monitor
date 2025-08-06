@@ -27,6 +27,12 @@ export interface SubService {
   connections?: SubServiceConnection[];
 }
 
+export interface SLA {
+  name: string;
+  uptime: number;
+  target: number;
+}
+
 export interface DashboardData {
   payments: Record<string, Service>;
   logistic: Record<string, Service>;

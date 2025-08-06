@@ -1,0 +1,110 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { SLA } from '../interfaces/DashboardInterfaces';
+
+interface Props {
+  slas: SLA[];
+}
+
+const { slas } = Astro.props;
+
+const isSLACompliant = (sla: SLA): boolean => {
+  return sla.uptime >= sla.target;
+};
+---
+
+<div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="px-6 py-4">
+    <div class="flex items-center">
+      <div class="bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg p-2 mr-3">
+        <Icon name="material-symbols:data-table" class="w-5 h-5 text-white"/>
+      </div>
+      <div>
+        <h2 class="text-sm font-bold  text-gray-800">Monitoreo de SLA</h2>
+        <p class="text-xs text-gray-500">Cumplimiento de SLA - Uptime</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      {slas.map((sla) => {
+        const isCompliant = isSLACompliant(sla);
+        const statusColor = isCompliant ? 'green' : 'red';
+        const statusBg = isCompliant ? 'bg-green-50' : 'bg-red-50';
+        const statusBorder = isCompliant ? 'border-green-200' : 'border-red-200';
+        const statusText = isCompliant ? 'text-green-800' : 'text-red-800';
+        const statusSubText = isCompliant ? 'text-green-600' : 'text-red-600';
+        
+        return (
+          <div class={`bg-white rounded-xl p-4 border ${statusBorder}`}>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class={`font-semibold ${statusText}`}>{sla.name}</h3>
+              <div class={`flex items-center justify-center w-8 h-8 rounded-full ${
+                isCompliant ? 'bg-green-100' : 'bg-red-100'
+              }`}>
+                {isCompliant ? (
+                  <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                ) : (
+                  <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                )}
+              </div>
+            </div>
+            
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-medium text-gray-600">Uptime Actual:</span>
+                <span class={`font-bold ${statusText}`}>{sla.uptime}%</span>
+              </div>
+              
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-medium text-gray-600">Objetivo:</span>
+                <span class="font-bold text-gray-800">{sla.target}%</span>
+              </div>
+              
+              <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div 
+                  class={`h-2 rounded-full transition-all duration-500 ${
+                    isCompliant 
+                      ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                      : 'bg-gradient-to-r from-red-500 to-red-600'
+                  }`}
+                  style={`width: ${Math.min((sla.uptime / sla.target) * 100, 100)}%`}
+                ></div>
+              </div>
+              
+              <div class="flex justify-between text-xs text-gray-500 mt-1">
+                <span>0%</span>
+                <span>{sla.target}%</span>
+              </div>
+            </div>
+            
+            <div class="mt-3 pt-3 border-t border-gray-200">
+              <div class="flex items-center justify-center">
+                {isCompliant ? (
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Cumple SLA
+                  </span>
+                ) : (
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    No cumple SLA
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div> 
