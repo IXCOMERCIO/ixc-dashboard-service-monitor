@@ -23,14 +23,23 @@ build-app:
   only:
     - develop
 
+create-zip:
+  stage: create-zip
+  image: alpine
+  before_script:
+    - apk add --update zip
+  script:
+    - cd dist
+    - zip -r app.zip .
+  artifacts:
+    paths:
+      - app.zip
 
 # ✅ Etapa de despliegue a Azure App Service usando ZIP deploy
 deploy-app:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   script:
-    - cd dist
-    - zip -r app.zip .
     - az login --service-principal -u "$AZ_APP_ID_TEST" -p "$AZ_APP_PWD_TEST" --tenant "$AZ_TENANT_ID_TEST"
     - az webapp deployment source config-zip --resource-group "$DEV_RESOURCE_GROUP" --name "$DEV_APP_NAME" --src app.zip
   only:
