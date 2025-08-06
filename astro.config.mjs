@@ -7,7 +7,7 @@ import icon from 'astro-icon';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  output: 'static',
+  output: 'server',
   integrations: [tailwindcss(), react(), icon()],
 
   env: {
