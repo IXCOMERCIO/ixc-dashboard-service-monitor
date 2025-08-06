@@ -9,6 +9,9 @@ variables:
 build-app:
   stage: build
   image: node:lts
+  before_script:
+    - rm -rf node_modules package-lock.json
+    - npm install
   script:
     - npm ci
     - npm run build
