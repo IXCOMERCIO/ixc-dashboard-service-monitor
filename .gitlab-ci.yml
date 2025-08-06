@@ -32,6 +32,7 @@ create-zip:
   script:
     - cd dist
     - zip -r app.zip .
+    - mv app.zip ../
   artifacts:
     paths:
       - app.zip
