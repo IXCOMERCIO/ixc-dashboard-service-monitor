@@ -17,5 +17,13 @@ export default defineConfig({
     }
   },
 
-  adapter: node({mode: 'standalone'}),
+  adapter: node({
+    mode: 'standalone',
+    port: 8080
+  }),
+
+  server: {
+    port: 8080,
+    host: true
+  }
 });

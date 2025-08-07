@@ -17,6 +17,8 @@ build-app:
     - npm ci
     - npm run build
     - cp server.js dist/server.js  # Asegura que el server.js esté incluido
+    - cp web.config dist/web.config  # Incluye la configuración de Azure
+    - cp startup.txt dist/startup.txt  # Incluye el comando de inicio
   artifacts:
     paths:
       - dist/
@@ -35,7 +37,7 @@ create-zip:
     - mv node_modules/ dist/
     - cd dist
     - | 
-      sed -i 's/"port": 4321/"port": process.env.PORT || 4321/' server/entry.mjs
+      sed -i 's/"port": 4321/"port": process.env.PORT || 8080/' server/entry.mjs
     - zip -r app.zip .
     - mv app.zip ../
   artifacts:
