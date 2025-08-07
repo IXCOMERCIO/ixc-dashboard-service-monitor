@@ -28,6 +28,9 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Delete package-lock.json y node_modules
+        run: "rm -f package-lock.json && rm -rf node_modules"
+
       - name: Install step
         run: "npm install"
 
