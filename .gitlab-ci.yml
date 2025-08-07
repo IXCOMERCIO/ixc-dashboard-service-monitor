@@ -35,6 +35,7 @@ create-zip:
     - mv node_modules/ dist/
     - cd dist
     - zip -r app.zip .
+    - mv app.zip ../
   artifacts:
     paths:
       - app.zip
