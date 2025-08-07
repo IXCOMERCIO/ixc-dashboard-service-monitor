@@ -35,7 +35,7 @@ create-zip:
     - mv node_modules/ dist/
     - cd dist
     - | 
-      sed -i 's/"port": 4321/"port": process.env.PORT || 4321/' dist/server/entry.mjs
+      sed -i 's/"port": 4321/"port": process.env.PORT || 4321/' server/entry.mjs
     - zip -r app.zip .
     - mv app.zip ../
   artifacts:
