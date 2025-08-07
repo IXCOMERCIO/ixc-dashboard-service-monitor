@@ -44,8 +44,9 @@ jobs:
 
     - name: npm install, build, and test
       run: |
-        npm ci
+        rm -rf package-lock.json
         npm install
+        npm ci
         npm run build --if-present
 
     - name: Upload artifact for deployment job
