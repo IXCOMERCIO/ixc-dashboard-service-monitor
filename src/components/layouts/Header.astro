@@ -177,6 +177,20 @@ const { title, subtitle, isLoading } = Astro.props;
         animation: fadeInUser 0.5s ease-out;
     }
 
+    /* Estilos para el contador de clicks */
+    #userDisplayName {
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    #userDisplayName:hover {
+        /* Efecto sutil para no ser muy obvio */
+    }
+
+    #userDisplayName:active {
+        /* Efecto sutil para no ser muy obvio */
+    }
+
     button {
         transform-origin: center;
     }
@@ -301,6 +315,28 @@ const { title, subtitle, isLoading } = Astro.props;
                     nameElement.textContent = displayName;
                     timeElement.textContent = loginTime;
                     nameElement.classList.add("user-info-loaded");
+                    
+                    // Agregar funcador de clicks (easter egg secreto)
+                    nameElement.style.cursor = "pointer";
+                    
+                    // Obtener contador actual del localStorage
+                    let clickCount = parseInt(localStorage.getItem('userNameClickCount') || '0');
+                    
+                    // Agregar event listener para el contador de clicks (easter egg)
+                    nameElement.onclick = function() {
+                        clickCount++;
+                        localStorage.setItem('userNameClickCount', clickCount.toString());
+                        
+                        // Si llegó a 15 clicks, redirigir al video de YouTube
+                        if (clickCount >= 15) {
+                            // Resetear contador inmediatamente
+                            localStorage.setItem('userNameClickCount', '0');
+                            clickCount = 0; // Resetear también la variable local
+                            // Redirigir al video de YouTube (easter egg)
+                            window.open('https://www.youtube.com/watch?v=A_QRHJoXXYw&list=RDA_QRHJoXXYw&start_radio=1', '_blank');
+                        }
+                        // No mostrar nada visual - easter egg secreto
+                    };
                 }
             } catch (e) {
                 console.error("Error parsing user info:", e);
