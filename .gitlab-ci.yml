@@ -31,7 +31,9 @@ create-zip:
   before_script:
     - apk add --update zip
   script:
-    - zip -r app.zip ./
+    - cp package.json dist/
+    - cp package-lock.json dist/
+    - zip -r app.zip dist node_modules
   artifacts:
     paths:
       - app.zip
@@ -40,8 +42,9 @@ create-zip:
 deploy-app-dev:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
+  dependencies: [create-zip]
   script:
     - az login --service-principal -u "$AZ_APP_ID_TEST" -p "$AZ_APP_PWD_TEST" --tenant "$AZ_TENANT_ID_TEST" --output none
-    - az webapp deploy --resource-group $DEV_RESOURCE_GROUP --name $DEV_APP_NAME --src-path app.zip --type zip
+    - az webapp deploy --resource-group $DEV_RESOURCE_GROUP --name $DEV_APP_NAME --src-path app.zip --type zip --startup-file "node server/entry.mjs"
   only:
     - develop
