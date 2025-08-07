@@ -143,15 +143,15 @@ const averageUptime = mockSLAs.reduce((acc, sla) => acc + sla.uptime, 0) / total
 
   <body class="bg-indigo-50 min-h-screen">
     <div class="main-content">
-    <Header title="Dashboard Healthcheck" subtitle="Desafío Q2 - Team LINCES" isLoading={false} />
+    <Header title="Dashboard Healthcheck"  isLoading={false} />
 
     <div class=" mx-auto px-4 py-6">
       
-      {/* banner para dar la bienvenida al mejor healthcheck */}
+      {/* banner para dar la bienvenida al mejor healthcheck 
       <div class="welcome-banner animate-fade-in shadow-lg">
         <h2>¡Bienvenido al mejor Healthcheck del mundo! 🦁</h2>
         <p>Team LINCES - Monitoreando servicios con excelencia</p>
-      </div>
+      </div> */}
 
       <!-- Resumen General -->
       <div class="mb-8 animate-fade-in">
@@ -412,9 +412,9 @@ const averageUptime = mockSLAs.reduce((acc, sla) => acc + sla.uptime, 0) / total
         </div>
       </div>
 
-      <div class="mt-4 text-center">
+     <!-- <div class="mt-4 text-center">
         <p class="text-sm text-gray-600 italic">"Juntos somos LINCES, juntos construimos el mejor healthcheck del mundo 🦁"</p>
-      </div>
+      </div> -->
     </div>
 
     <script>

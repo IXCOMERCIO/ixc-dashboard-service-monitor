@@ -31,7 +31,7 @@ const { title, subtitle, isLoading } = Astro.props;
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         ></path>
                     </svg>
                 </div>
@@ -46,7 +46,7 @@ const { title, subtitle, isLoading } = Astro.props;
                         }
                     </h1>
                     <p class="text-sm text-gray-500 flex items-center">
-                        <svg
+                        <!-- <svg
                             class="w-4 h-4 mr-2"
                             fill="none"
                             stroke="currentColor"
@@ -58,7 +58,7 @@ const { title, subtitle, isLoading } = Astro.props;
                                 stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             ></path>
-                        </svg>
+                        </svg> -->
                         {subtitle}
                     </p>
                 </div>
@@ -213,25 +213,35 @@ const { title, subtitle, isLoading } = Astro.props;
         const diffMs = now - date;
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
-
-        const chistes = [
-            "Rugiendo desde el login 🦁",
-            "Más conectado que un WiFi LINCES 📶",
+        const chistes = ["Todo preparado para ti."]
+        /* const chistes = [
+            // "Rugiendo desde el login 🦁",
+            "Sesión iniciada correctamente 🦁",
+            // "Más conectado que un WiFi LINCES 📶",
+            "Más conectado que un WiFi 📶",
             "Online como un verdadero felino 🐾",
             "Cazando bugs desde que llegaste 🐛",
             "Monitoreando como los grandes 👑",
-            "Código limpio, como melena de LINCE ✨",
+            // "Código limpio, como melena de LINCE ✨",
+            "Código limpio y elegante ✨",
             "Tu uptime es del 99.9% como nosotros 📊",
-            "Debugging mode: LINCE activado 🔍",
+            // "Debugging mode: LINCE activado 🔍",
+            "Debugging mode activado 🔍",
             "Tu conexión vale oro como nuestro equipo 🏆",
-            "Healthcheck aprobado por LINCES 💚",
-            "Session-time: Nivel LINCE alcanzado 🎯",
-            "Tu login fue tan smooth como un LINCE 🌟",
+            // "Healthcheck aprobado por LINCES 💚",
+            "Healthcheck aprobado 💚",
+            // "Session-time: Nivel LINCE alcanzado 🎯",
+            "Session-time: Nivel experto alcanzado 🎯",
+            // "Tu login fue tan smooth como un LINCE 🌟",
+            "Tu login fue tan smooth 🌟",
             "Dashboard premium activado 👨‍💻",
-            "Productividad nivel: EQUIPO LINCES 🚀",
-            "API calls faster than a LINCE hunt 💨",
-            "Server response: RUGIDO aprobado 📢",
-        ];
+            // "Productividad nivel: EQUIPO LINCES 🚀",
+            "Productividad nivel: Experto 🚀",
+            // "API calls faster than a LINCE hunt 💨",
+            "API calls más rápidas que el viento 💨",
+            // "Server response: RUGIDO aprobado 📢",
+            "Server response: Aprobado 📢",
+        ];*/
 
         const seed = Math.floor(diffMins / 1);
         const chiste = chistes[seed % chistes.length];
@@ -281,7 +291,7 @@ const { title, subtitle, isLoading } = Astro.props;
         if (userInfo) {
             try {
                 const user = JSON.parse(userInfo);
-                const displayName = `¡Hola, ${user.username}! 🦁`;
+                const displayName = `¡Hola, ${user.username}!`;
                 const loginTime = formatLoginTime(user.loginTime);
 
                 const nameElement = document.getElementById("userDisplayName");
@@ -319,10 +329,13 @@ const { title, subtitle, isLoading } = Astro.props;
 
     // para cuando se desconecte
     function handleLogout() {
-        if (confirm("¿Estás seguro que quieres cerrar sesión? 🦁")) {
+        // Lógica anterior comentada
+        /*
+        if (confirm("¿Estás seguro que quieres cerrar sesión?")) {
             if (
                 confirm(
-                    "Segurito seguritooo??? 🦁\n\n¿De verdad quieres abandonar a los LINCES? 😿",
+                    // "Segurito seguritooo??? 🦁\n\n¿De verdad quieres abandonar a los LINCES? 😿",
+                    "¿De verdad quieres cerrar sesión? 😿"
                 )
             ) {
                 const userInfo = localStorage.getItem("userInfo");
@@ -341,11 +354,13 @@ const { title, subtitle, isLoading } = Astro.props;
                         try {
                             const user = JSON.parse(userInfo);
                             alert(
-                                `¡Hasta pronto, ${user.username}! 🦁\nGracias por ser parte del team LINCES\n\n¡Nos vemos en la próxima cacería de bugs! 🐛`,
+                                // `¡Hasta pronto, ${user.username}! 🦁\nGracias por ser parte del team LINCES\n\n¡Nos vemos en la próxima cacería de bugs! 🐛`,
+                                `¡Hasta pronto, ${user.username}! 🦁\nGracias por usar nuestro dashboard\n\n¡Nos vemos pronto! 🐛`
                             );
                         } catch (e) {
                             alert(
-                                "¡Hasta pronto! 🦁\n¡Que los LINCES te acompañen!",
+                                // "¡Hasta pronto! 🦁\n¡Que los LINCES te acompañen!",
+                                "¡Hasta pronto! 🦁\n¡Que tengas un buen día!"
                             );
                         }
                     }
@@ -368,6 +383,21 @@ const { title, subtitle, isLoading } = Astro.props;
         } else {
             alert("¡Excelente decisión! 🦁");
         }
+        */
+
+        // Nueva lógica simple
+        if (confirm("¿Estás seguro que quieres cerrar sesión?")) {
+            // Limpiar sesión
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userInfo");
+            
+            // Limpiar cookies
+            document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            
+            // Redirigir al login
+            window.location.href = "/login";
+        }
+        // Si cancela, no hacer nada (solo cerrar el modal)
     }
 
     document.addEventListener("DOMContentLoaded", function () {
