@@ -19,6 +19,7 @@ build-app:
     - cp server.js dist/server.js  # Asegura que el server.js esté incluido
     - cp web.config dist/web.config  # Incluye la configuración de Azure
     - cp startup.txt dist/startup.txt  # Incluye el comando de inicio
+    - cp azure-app-settings.json dist/azure-app-settings.json  # Configuración de Azure
   artifacts:
     paths:
       - dist/
@@ -38,6 +39,8 @@ create-zip:
     - cd dist
     - | 
       sed -i 's/"port": 4321/"port": process.env.PORT || 8080/' server/entry.mjs
+    - | 
+      sed -i 's/"host": false/"host": process.env.HOST || "0.0.0.0"/' server/entry.mjs
     - zip -r app.zip .
     - mv app.zip ../
   artifacts:
@@ -51,6 +54,7 @@ deploy-app-dev:
   dependencies: [create-zip]
   script:
     - az login --service-principal -u "$AZ_APP_ID_TEST" -p "$AZ_APP_PWD_TEST" --tenant "$AZ_TENANT_ID_TEST" --output none
+    - az webapp config appsettings set --resource-group $DEV_RESOURCE_GROUP --name $DEV_APP_NAME --settings WEBSITES_PORT=8080 WEBSITES_CONTAINER_START_TIME_LIMIT=1800 WEBSITES_ENABLE_APP_SERVICE_STORAGE=true NODE_ENV=production PORT=8080 HOST=0.0.0.0
     - az webapp deploy --resource-group $DEV_RESOURCE_GROUP --name $DEV_APP_NAME --src-path app.zip --type zip
   only:
     - develop
