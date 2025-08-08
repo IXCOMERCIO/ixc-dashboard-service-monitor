@@ -5,9 +5,15 @@ import TabItem from '../components/TabItem.astro';
 import TabContent from '../components/TabContent.astro';
 import Header from '../components/layouts/Header.astro';
 import SLAStatus from '../components/services/SLAStatus.astro';
-import { BASE_DASHBOARD_URL } from 'astro:env/server';
 import type { DashboardData, Service } from '../components/interfaces/DashboardInterfaces';
 import { mockSLAs } from '../data/mockSLA';
+
+const BASE_DASHBOARD_URL = import.meta.env.BASE_DASHBOARD_URL || 'http://localhost:3000';
+
+// Verificar que la variable de entorno esté configurada en producción
+if (!import.meta.env.BASE_DASHBOARD_URL && import.meta.env.PROD) {
+  throw new Error('BASE_DASHBOARD_URL environment variable is required in production');
+}
 
 const res = await fetch(`${BASE_DASHBOARD_URL}/dashboard`);
 if (!res.ok) {
@@ -47,11 +53,11 @@ const sections = [
 
 // Calcular estadísticas generales
 const totalServices = sections.reduce((acc, section) => acc + section.cards.length, 0);
-const healthyServices = sections.reduce((acc, section) => 
+const healthyServices = sections.reduce((acc, section) =>
   acc + section.cards.filter(card => card.status === 'Healthy').length, 0);
-const warningServices = sections.reduce((acc, section) => 
+const warningServices = sections.reduce((acc, section) =>
   acc + section.cards.filter(card => card.status === 'Warning').length, 0);
-const criticalServices = sections.reduce((acc, section) => 
+const criticalServices = sections.reduce((acc, section) =>
   acc + section.cards.filter(card => card.status === 'Critical').length, 0);
 
 // Calcular estadísticas de SLA

@@ -3,8 +3,9 @@ export const prerender = false;
 import StepBack from "../../../components/hooks/StepBack.astro";
 import Header from "../../../components/layouts/Header.astro";
 import ServiceDetail from "../../../components/services/ServiceDetail.astro";
-import { BASE_DASHBOARD_URL } from "astro:env/server";
 import type { SubService } from "../../../components/interfaces/DashboardInterfaces";
+
+const BASE_DASHBOARD_URL = import.meta.env.BASE_DASHBOARD_URL || 'http://localhost:3000';
 
 const { service, id } = Astro.params;
 

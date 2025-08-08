@@ -34,6 +34,11 @@ jobs:
       - name: Install step
         run: "npm install"
 
+      - name: Create .env file
+        run: |
+          echo "BASE_DASHBOARD_URL=${{ secrets.BASE_DASHBOARD_URL }}" > .env
+          echo "SHOW_GENERAL_STATUS=true" >> .env
+
       - name: Build step
         run: "npm run build"
 
@@ -43,5 +48,6 @@ jobs:
           project: "jeremylen-ixc-dashboa-41"
           entrypoint: "server/entry.mjs"
           root: "dist"
-          
-          
+        env:
+          BASE_DASHBOARD_URL: ${{ secrets.BASE_DASHBOARD_URL }}
+          SHOW_GENERAL_STATUS: "true"  

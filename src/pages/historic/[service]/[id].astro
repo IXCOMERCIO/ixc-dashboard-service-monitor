@@ -2,9 +2,10 @@
 export const prerender = false;
 import StepBack from "../../../components/hooks/StepBack.astro";
 import Header from "../../../components/layouts/Header.astro";
-import { BASE_DASHBOARD_URL } from "astro:env/server";
 import PerformanceChart from "../../../components/statistics/PerformanceChart.jsx";
 import { Icon } from "astro-icon/components";
+
+const BASE_DASHBOARD_URL = import.meta.env.BASE_DASHBOARD_URL || 'http://localhost:3000';
 
 interface ErrorData {
   date: string;
@@ -45,7 +46,7 @@ try {
   const statisticsRes = await fetch(apiUrlStatistics);
   const errorsRes = await fetch(apiUrlErrors);
   const servicesRes = await fetch(apiUrlServices);
-  const graphRes = await fetch(apiUrlGraph)
+  const graphRes = await fetch(apiUrlGraph);
 
   if (!statisticsRes.ok) {
     throw new Error(`Failed to fetch data from ${apiUrlStatistics}`);
@@ -66,8 +67,8 @@ try {
   statisticsData = await statisticsRes.json();
   errorData = await errorsRes.json();
   servicesData = await servicesRes.json();
-  graphData = await graphRes.json()
-  console.log(graphData)
+  graphData = await graphRes.json();
+  console.log(graphData);
 } catch (error) {
   console.error("Error fetching service details:", error);
 }

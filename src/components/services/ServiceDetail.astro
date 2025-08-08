@@ -2,7 +2,8 @@
 import ServiceStatus from "./ServiceStatus.astro";
 import ArchitectureDiagram from "../architecture/ArchitectureDiagram.jsx";
 import type { SubService } from "../interfaces/DashboardInterfaces";
-import { SHOW_GENERAL_STATUS } from 'astro:env/server';
+
+const SHOW_GENERAL_STATUS = import.meta.env.SHOW_GENERAL_STATUS === 'true' || import.meta.env.SHOW_GENERAL_STATUS === undefined;
 
 export interface Props {
   serviceDetail: {
