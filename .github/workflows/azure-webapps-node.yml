@@ -80,25 +80,12 @@ jobs:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-  
-  add-variables:
-    runs-on: windows-latest
-
-    steps:
-    - name: Run Azure Login with OIDC
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      
-    - name: Add App Settings
+    - name: 'Add variables'
       uses: azure/appservice-settings@v1
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        mask-inputs: true
-        app-settings-json: |
-            [
+        app-settings-json:  |
+          [
               {
                 "name": "BASE_DASHBOARD_URL",
                 "value": "${{ secrets.BASE_DASHBOARD_URL }}",
@@ -120,9 +107,7 @@ jobs:
                 "slotSetting": false
               }
             ]
-        id: settings 
-        run: |
-            az logout
+        id: settings
           
 
       
